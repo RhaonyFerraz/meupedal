@@ -1,3 +1,26 @@
+// Funções Globais para Minimizar e Restaurar Painel de Métricas (instantâneo)
+window.minimizeHudDashboard = function(e) {
+  if (e) {
+    if (e.preventDefault) e.preventDefault();
+    if (e.stopPropagation) e.stopPropagation();
+  }
+  const hudDashboard = document.getElementById('hud-metrics-dashboard');
+  const btnRestore = document.getElementById('btn-restore-dashboard');
+  if (hudDashboard) hudDashboard.classList.add('minimized');
+  if (btnRestore) btnRestore.style.display = 'flex';
+};
+
+window.restoreHudDashboard = function(e) {
+  if (e) {
+    if (e.preventDefault) e.preventDefault();
+    if (e.stopPropagation) e.stopPropagation();
+  }
+  const hudDashboard = document.getElementById('hud-metrics-dashboard');
+  const btnRestore = document.getElementById('btn-restore-dashboard');
+  if (hudDashboard) hudDashboard.classList.remove('minimized');
+  if (btnRestore) btnRestore.style.display = 'none';
+};
+
 // Controlador Principal do Aplicativo MeuPedal
 class App {
   constructor() {
@@ -101,20 +124,20 @@ class App {
     if (avgSpeedEl) avgSpeedEl.innerText = metrics.avgSpeedKmH.toFixed(1);
     if (maxSpeedEl) maxSpeedEl.innerText = metrics.maxSpeedKmH.toFixed(1);
 
-    // Status visual pulsante
+    // Status visual pulsante (apenas a bolinha com o efeito, sem texto)
     if (statusPill) {
       if (state === 'RECORDING') {
         statusPill.className = 'status-pill recording';
-        statusPill.innerHTML = '<span class="pulse-circle red"></span> GRAVANDO';
-      } else if (state === 'PAUSED_AUTO') {
-        statusPill.className = 'status-pill auto-paused';
-        statusPill.innerHTML = '<span class="pulse-circle orange"></span> AUTO-PAUSA';
-      } else if (state === 'PAUSED_MANUAL') {
+        statusPill.title = 'Gravando';
+        statusPill.innerHTML = '<span class="pulse-circle red"></span>';
+      } else if (state === 'PAUSED_MANUAL' || state === 'PAUSED_AUTO') {
         statusPill.className = 'status-pill paused';
-        statusPill.innerHTML = '<span class="pulse-circle yellow"></span> PAUSADO';
+        statusPill.title = 'Pausado';
+        statusPill.innerHTML = '<span class="pulse-circle yellow"></span>';
       } else {
         statusPill.className = 'status-pill stopped';
-        statusPill.innerHTML = '<span class="pulse-circle gray"></span> PRONTO';
+        statusPill.title = 'Pronto';
+        statusPill.innerHTML = '<span class="pulse-circle green"></span>';
       }
     }
 
@@ -361,18 +384,15 @@ class App {
     // Minimizar e Restaurar painel de métricas do HUD
     const btnMinimize = document.getElementById('btn-minimize-dashboard');
     const btnRestore = document.getElementById('btn-restore-dashboard');
-    const hudDashboard = document.getElementById('hud-metrics-dashboard');
 
-    if (btnMinimize && btnRestore && hudDashboard) {
-      btnMinimize.addEventListener('click', () => {
-        hudDashboard.classList.add('minimized');
-        btnRestore.style.display = 'flex';
-      });
+    if (btnMinimize) {
+      btnMinimize.onclick = (e) => window.minimizeHudDashboard(e);
+      btnMinimize.addEventListener('touchend', (e) => window.minimizeHudDashboard(e), { passive: false });
+    }
 
-      btnRestore.addEventListener('click', () => {
-        hudDashboard.classList.remove('minimized');
-        btnRestore.style.display = 'none';
-      });
+    if (btnRestore) {
+      btnRestore.onclick = (e) => window.restoreHudDashboard(e);
+      btnRestore.addEventListener('touchend', (e) => window.restoreHudDashboard(e), { passive: false });
     }
 
     // Botões de controle de gravação Pós-Treino

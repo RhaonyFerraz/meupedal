@@ -54,34 +54,44 @@
 .status-pill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   background: rgba(19, 21, 27, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(10px);
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-family: var(--font-hud);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  color: #fff;
+  -webkit-backdrop-filter: blur(10px);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  padding: 0;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
 .status-pill.recording {
-  border-color: rgba(255, 59, 48, 0.4);
+  border-color: rgba(255, 59, 48, 0.5);
+  box-shadow: 0 0 12px rgba(255, 59, 48, 0.35);
 }
 
-.status-pill.auto-paused {
-  border-color: rgba(252, 76, 2, 0.5);
-  background: rgba(252, 76, 2, 0.2);
+.status-pill.paused {
+  border-color: rgba(255, 179, 0, 0.5);
+  box-shadow: 0 0 12px rgba(255, 179, 0, 0.35);
+}
+
+.status-pill.stopped {
+  border-color: rgba(0, 230, 118, 0.35);
+  box-shadow: 0 0 12px rgba(0, 230, 118, 0.2);
 }
 
 .pulse-circle {
-  width: 9px;
-  height: 9px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   display: inline-block;
+}
+
+.pulse-circle.green {
+  background-color: #00e676;
+  box-shadow: 0 0 10px #00e676;
+  animation: pulseAnim 1.6s infinite ease-in-out;
 }
 
 .pulse-circle.red {
@@ -91,23 +101,27 @@
 }
 
 .pulse-circle.orange {
-  background-color: #fc4c02;
-  box-shadow: 0 0 10px #fc4c02;
-  animation: pulseAnim 0.8s infinite ease-in-out;
+  background-color: #ff9100;
+  box-shadow: 0 0 10px #ff9100;
+  animation: pulseAnim 1.2s infinite ease-in-out;
 }
 
 .pulse-circle.yellow {
   background-color: #ffb300;
+  box-shadow: 0 0 10px #ffb300;
+  animation: pulseAnim 1.2s infinite ease-in-out;
 }
 
 .pulse-circle.gray {
-  background-color: #7b8092;
+  background-color: #00e676;
+  box-shadow: 0 0 10px #00e676;
+  animation: pulseAnim 1.6s infinite ease-in-out;
 }
 
 @keyframes pulseAnim {
-  0% { transform: scale(0.9); opacity: 0.8; }
+  0% { transform: scale(0.85); opacity: 0.75; }
   50% { transform: scale(1.3); opacity: 1; }
-  100% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(0.85); opacity: 0.75; }
 }
 
 /* Botões Flutuantes no Mapa */

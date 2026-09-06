@@ -1,5 +1,5 @@
 // Service Worker para MeuPedal PWA
-const CACHE_NAME = 'meupedal-v6';
+const CACHE_NAME = 'meupedal-v7';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -67,18 +67,18 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // App Shell strategy: Stale While Revalidate
+  // App Shell strategy: Network First (para carregar updates imediatos), fallback para Cache offline
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
+    fetch(event.request)
+      .then((networkResponse) => {
         if (networkResponse && networkResponse.status === 200 && event.request.method === 'GET') {
           const resClone = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, resClone));
         }
         return networkResponse;
-      }).catch(() => cachedResponse);
-
-      return cachedResponse || fetchPromise;
-    })
+      })
+      .catch(() => {
+        return caches.match(event.request);
+      })
   );
 });
