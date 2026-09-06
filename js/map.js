@@ -27,10 +27,10 @@ class PedalMap {
       attributionControl: false
     }).setView([initialLat, initialLng], 15);
 
-    // Adicionar camada escura moderna (CartoDB Dark Matter)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    // Mapa escuro moderno usando OpenStreetMap (gratuito, sem API key)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      subdomains: 'abcd'
+      attribution: '© OpenStreetMap'
     }).addTo(this.liveMap);
 
     // Polyline do trajeto ao vivo com brilho laranja Strava
@@ -166,10 +166,10 @@ class PedalMap {
       attributionControl: false
     });
 
-    // Camada moderna com visual esportivo
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    // Mapa usando OpenStreetMap (gratuito, sem API key)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      subdomains: 'abcd'
+      attribution: '© OpenStreetMap'
     }).addTo(this.summaryMap);
 
     // Desenhar segmentos coloridos por velocidade (Verde = Rápido, Laranja = Médio, Vermelho = Lento)
