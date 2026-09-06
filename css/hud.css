@@ -132,26 +132,29 @@
 }
 
 .hud-map-btn {
-  background: rgba(19, 21, 27, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(10px);
-  color: #fff;
+  background: rgba(19, 21, 27, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #00e676;
   width: 38px;
   height: 38px;
-  border-radius: 12px;
+  border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  transition: all 0.22s ease;
+  padding: 0;
 }
 
-.hud-map-btn.active {
-  background: var(--orange-strava);
-  border-color: var(--orange-light);
-  box-shadow: 0 0 14px var(--orange-glow);
+.hud-map-btn:hover,
+.hud-map-btn:active {
+  background: rgba(0, 230, 118, 0.2);
+  border-color: #00e676;
+  box-shadow: 0 0 16px rgba(0, 230, 118, 0.45);
+  transform: scale(1.08);
 }
 
 /* Painel Simulador e Testes */
