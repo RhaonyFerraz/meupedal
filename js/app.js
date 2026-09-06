@@ -425,15 +425,6 @@ class App {
       btnTestVoice.onclick = () => window.audioCoach.testVoice();
     }
 
-    // Auto-pausa toggle
-    const autoPauseToggle = document.getElementById('cfg-autopause-toggle');
-    if (autoPauseToggle) {
-      autoPauseToggle.addEventListener('change', async (e) => {
-        window.pedalTracker.autoPauseEnabled = e.target.checked;
-        await this._saveCurrentSettings();
-      });
-    }
-
     // Peso do ciclista
     const weightInput = document.getElementById('cfg-cyclist-weight');
     if (weightInput) {
@@ -459,12 +450,6 @@ class App {
       window.audioCoach.intervalKm = settings.audioIntervalKm;
     }
 
-    const autoPauseToggle = document.getElementById('cfg-autopause-toggle');
-    if (autoPauseToggle && settings.autoPauseEnabled !== undefined) {
-      autoPauseToggle.checked = settings.autoPauseEnabled;
-      window.pedalTracker.autoPauseEnabled = settings.autoPauseEnabled;
-    }
-
     const weightInput = document.getElementById('cfg-cyclist-weight');
     if (weightInput && settings.cyclistWeightKg) {
       weightInput.value = settings.cyclistWeightKg;
@@ -475,13 +460,11 @@ class App {
   async _saveCurrentSettings() {
     const audioToggle = document.getElementById('cfg-audio-toggle');
     const audioInterval = document.getElementById('cfg-audio-interval');
-    const autoPauseToggle = document.getElementById('cfg-autopause-toggle');
     const weightInput = document.getElementById('cfg-cyclist-weight');
 
     const settings = {
       audioCoachEnabled: audioToggle ? audioToggle.checked : true,
       audioIntervalKm: audioInterval ? Number(audioInterval.value) : 1,
-      autoPauseEnabled: autoPauseToggle ? autoPauseToggle.checked : true,
       cyclistWeightKg: weightInput ? Number(weightInput.value) : 75,
       activeBikeId: window.bikeGarage.activeBikeId
     };

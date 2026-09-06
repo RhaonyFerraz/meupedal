@@ -25,12 +25,7 @@ class PedalTracker {
     this.lastPosition = null;
     this.lastElevation = null;
 
-    // Configurações de Auto-Pausa
-    this.autoPauseEnabled = true;
-    this.autoPauseSpeedThreshold = 2.5; // km/h
-    this.lowSpeedCount = 0;
-    this.lowSpeedMaxTicks = 6; // ~6 segundos abaixo de 2.5 km/h para pausar
-    this.gracePeriodSec = 15; // Não pausar automaticamente nos primeiros 15 segundos
+    // Auto-pausa desativada — só o usuário pode pausar manualmente
 
     // Dados do ciclista
     this.cyclistWeightKg = 75;
@@ -64,15 +59,11 @@ class PedalTracker {
     this._notifyUpdate();
   }
 
-  pause(isManual = true) {
+  pause() {
     if (this.state !== 'RECORDING') return;
 
-    this.state = isManual ? 'PAUSED_MANUAL' : 'PAUSED_AUTO';
+    this.state = 'PAUSED_MANUAL';
     this.currentSpeedKmH = 0;
-
-    if (window.audioCoach && !isManual) {
-      window.audioCoach.speakAutoPause();
-    }
 
     this._notifyUpdate();
   }
@@ -80,17 +71,11 @@ class PedalTracker {
   resume() {
     if (this.state !== 'PAUSED_MANUAL' && this.state !== 'PAUSED_AUTO') return;
 
-    const wasAuto = this.state === 'PAUSED_AUTO';
     this.state = 'RECORDING';
-    this.lowSpeedCount = 0;
-
-    if (window.audioCoach && wasAuto) {
-      window.audioCoach.speakAutoResume();
-    }
+    this.lastPosition = null; // Reinicia posição para não calcular salto após pausa
 
     this._notifyUpdate();
   }
-
   stop() {
     this.state = 'STOPPED';
 
@@ -207,20 +192,7 @@ class PedalTracker {
       // Filtro de ruído: se velocidade instantânea for irreal (> 90 km/h), descarta o pulo
       if (speedKmH > 90) return;
 
-      // Auto-pausa inteligente (só ativa após período de carência)
-      if (this.autoPauseEnabled && this.movingDurationSec >= this.gracePeriodSec) {
-        if (speedKmH < this.autoPauseSpeedThreshold) {
-          this.lowSpeedCount++;
-          if (this.lowSpeedCount >= this.lowSpeedMaxTicks && this.state === 'RECORDING') {
-            this.pause(false); // Pausa automática
-          }
-        } else {
-          this.lowSpeedCount = 0;
-          if (this.state === 'PAUSED_AUTO') {
-            this.resume(); // Retomada automática
-          }
-        }
-      }
+      // Auto-pausa removida — o app nunca pausa sozinho
 
       // Somar distância apenas se estiver gravando
       if (this.state === 'RECORDING') {
