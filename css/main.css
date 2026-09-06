@@ -93,59 +93,13 @@ body {
   cursor: pointer;
 }
 
-/* --- HEADER FIXO --- */
-.app-header {
-  height: 54px;
-  background-color: var(--bg-card);
-  border-bottom: var(--border-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
+/* --- FINA FAIXA PRETA DE DIVISÃO SUPERIOR --- */
+.app-header-strip {
+  height: 3px;
+  background-color: #000000;
+  width: 100%;
+  flex-shrink: 0;
   z-index: 100;
-}
-
-.brand-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.brand-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
-}
-
-.brand-name {
-  font-family: var(--font-hud);
-  font-weight: 700;
-  font-size: 19px;
-  letter-spacing: 0.5px;
-  color: #ffffff;
-}
-
-.brand-name span {
-  color: var(--orange-strava);
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.header-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border-color);
-  color: #ffffff;
-  border-radius: 8px;
-  padding: 6px 10px;
-  font-size: 13px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
 /* --- ÁREA DAS TELAS (TAB VIEWS) --- */
