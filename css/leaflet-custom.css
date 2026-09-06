@@ -1,0 +1,98 @@
+/* =========================================================
+   MEUPEDAL - CUSTOMIZAÇÕES DO LEAFLET MAP
+   ========================================================= */
+
+.leaflet-container {
+  background-color: #0b0c10 !important;
+  font-family: inherit;
+}
+
+/* Ocultar barra de zoom padrão feia para manter visual limpo de PWA */
+.leaflet-control-zoom {
+  display: none !important;
+}
+
+/* Marcador do Ciclista ao Vivo */
+.cyclist-live-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radar-pulse {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(252, 76, 2, 0.35);
+  border: 2px solid #fc4c02;
+  animation: radarWave 1.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+@keyframes radarWave {
+  0% { transform: scale(0.5); opacity: 1; }
+  70% { transform: scale(1.6); opacity: 0.15; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+.rider-dot {
+  position: relative;
+  z-index: 5;
+  width: 26px;
+  height: 26px;
+  background: #fc4c02;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(252, 76, 2, 0.8);
+  transition: transform 0.3s ease;
+}
+
+/* Marcadores de Início e Chegada da Rota */
+.route-pin-start, .route-pin-end {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pin-inner {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.pin-inner.start {
+  background-color: #00e676;
+}
+
+.pin-inner.end {
+  background-color: #1a1d26;
+}
+
+/* Marcador de Scrub Sincronizado com o Gráfico de Altimetria */
+.scrub-sync-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.05s linear;
+}
+
+.scrub-dot {
+  width: 16px;
+  height: 16px;
+  background-color: #00e5ff;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 14px #00e5ff;
+}

@@ -1,0 +1,48 @@
+{
+  "name": "MeuPedal - Gravador & Treino",
+  "short_name": "MeuPedal",
+  "description": "Gravador de pedal com GPS ao vivo, altimetria, áudio coach por voz e garagem de bike.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0c",
+  "theme_color": "#fc4c02",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/icons/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["sports", "fitness", "health"],
+  "shortcuts": [
+    {
+      "name": "Gravar Pedal",
+      "url": "./index.html?action=record",
+      "description": "Abrir direto no painel do gravador"
+    },
+    {
+      "name": "Feed e Histórico",
+      "url": "./index.html?tab=feed",
+      "description": "Ver seus pedais anteriores"
+    },
+    {
+      "name": "Garagem da Bike",
+      "url": "./index.html?tab=garage",
+      "description": "Verificar desgaste das peças"
+    }
+  ]
+}

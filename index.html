@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>MeuPedal - Gravador de Ciclismo & Treino</title>
+
+  <!-- PWA & Mobile Meta Tags -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#fc4c02" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MeuPedal" />
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
+  <link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg" />
+
+  <!-- SEO -->
+  <meta name="description" content="Gravador de pedal com GPS ao vivo, altimetria, áudio coach por voz no fone, exportação GPX e garagem de bike." />
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- App Stylesheets -->
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/hud.css" />
+  <link rel="stylesheet" href="css/leaflet-custom.css" />
+</head>
+<body>
+
+  <div id="app-container">
+
+    <!-- Banner de Instalação PWA -->
+    <div id="pwa-install-banner" class="pwa-banner">
+      <span>📱 Instale o MeuPedal direto na tela inicial!</span>
+      <button id="btn-pwa-install">Instalar</button>
+    </div>
+
+    <!-- Header do App -->
+    <header class="app-header">
+      <div class="brand-logo">
+        <img src="assets/icons/icon.svg" alt="MeuPedal Logo" class="brand-icon" />
+        <span class="brand-name">MEU<span>PEDAL</span></span>
+      </div>
+      <div class="header-actions">
+        <button class="header-btn" onclick="window.app.navigateTo('settings')" title="Configurações e Áudio Coach">
+          🎧 Coach
+        </button>
+      </div>
+    </header>
+
+    <!-- Conteúdo das Abas (Views) -->
+    <main class="tab-content-area">
+
+      <!-- ==========================================
+           ABA 1: 📍 GRAVADOR DE PEDAL AO VIVO (HUD)
+           ========================================== -->
+      <section id="tab-record" class="tab-view active">
+        <div class="recorder-view">
+          
+          <!-- Mapa Leaflet em Tela Cheia -->
+          <div id="live-map" class="live-map-container"></div>
+          <div class="hud-gradient-overlay"></div>
+
+          <!-- Camada Interativa do HUD -->
+          <div class="hud-layer">
+            
+            <!-- Barra Superior do HUD -->
+            <div class="hud-top-bar">
+              <div id="recording-status-pill" class="status-pill stopped">
+                <span class="pulse-circle gray"></span> PRONTO
+              </div>
+
+              <div class="hud-map-controls">
+                <button id="btn-recenter" class="hud-map-btn active" title="Centralizar no Ciclista">
+                  🎯
+                </button>
+              </div>
+            </div>
+
+            <!-- Faixa do Modo Simulação para Testes Imediatos -->
+            <div class="simulator-strip">
+              <label class="sim-label">
+                <input type="checkbox" id="switch-simulate" checked style="accent-color: #fc4c02;" />
+                <span>Simulador de Percurso</span>
+              </label>
+              <div class="sim-controls">
+                <span style="color: #7b8092; font-size: 11px;">Velocidade:</span>
+                <select id="sim-speed-select" class="sim-speed-select">
+                  <option value="1">1x Normal</option>
+                  <option value="2" selected>2x Demo</option>
+                  <option value="5">5x Rápido</option>
+                  <option value="10">10x Turbo</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Velocímetro Central em Formato Gigante -->
+            <div class="speedometer-hero">
+              <div class="speed-number-wrap">
+                <span id="hud-speed" class="speed-huge">0.0</span>
+                <span class="speed-unit">km/h</span>
+              </div>
+              <span class="speed-label">Velocidade Atual</span>
+            </div>
+
+            <!-- Dashboard de Métricas de Guidão -->
+            <div class="hud-metrics-dashboard">
+              
+              <!-- Linha Primária: Distância e Tempo -->
+              <div class="hud-primary-row">
+                <div class="metric-box-primary">
+                  <span class="m-title">Distância</span>
+                  <div class="m-number-big">
+                    <span id="hud-distance">0.00</span> <small>km</small>
+                  </div>
+                </div>
+
+                <div class="metric-box-primary">
+                  <span class="m-title">Tempo em Movimento</span>
+                  <div class="m-number-big">
+                    <span id="hud-moving-time">00:00</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Linha Secundária: Altimetria, Calorias, Médias -->
+              <div class="hud-secondary-row">
+                <div class="metric-box-mini">
+                  <span class="m-title">Subida</span>
+                  <span class="m-number-mini"><span id="hud-elevation">0</span> <small>m</small></span>
+                </div>
+
+                <div class="metric-box-mini">
+                  <span class="m-title">Calorias</span>
+                  <span class="m-number-mini"><span id="hud-calories">0</span> <small>kcal</small></span>
+                </div>
+
+                <div class="metric-box-mini">
+                  <span class="m-title">Vel. Média</span>
+                  <span class="m-number-mini"><span id="hud-avg-speed">0.0</span> <small>km/h</small></span>
+                </div>
+
+                <div class="metric-box-mini">
+                  <span class="m-title">Tempo Total</span>
+                  <span class="m-number-mini"><span id="hud-total-time">00:00</span></span>
+                </div>
+              </div>
+
+              <!-- Controles Táteis de Gravação -->
+              <div class="hud-action-controls">
+                <button id="btn-start-record" class="btn-record-main btn-start">
+                  ▶ Iniciar Pedal
+                </button>
+                <button id="btn-pause-record" class="btn-record-main btn-pause" style="display: none;">
+                  ⏸ Pausar
+                </button>
+                <button id="btn-resume-record" class="btn-record-main btn-resume" style="display: none;">
+                  ▶ Retomar
+                </button>
+                <button id="btn-finish-record" class="btn-record-main btn-finish" style="display: none;">
+                  🏁 Finalizar
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           ABA 2: 📊 FEED E HISTÓRICO DE TREINOS
+           ========================================== -->
+      <section id="tab-feed" class="tab-view">
+        <div class="history-container">
+          
+          <!-- Metas e Resumo da Semana e Mês -->
+          <div class="section-title">Resumo de Treino</div>
+          <div class="stats-summary-grid">
+            <div class="stats-summary-card">
+              <span class="card-tag">Esta Semana</span>
+              <div class="big-stat">
+                <span id="stat-week-km" class="number">0.0</span>
+                <span class="unit">km</span>
+              </div>
+              <div class="stat-pills">
+                <span id="stat-week-count">0 pedais</span>
+                <span id="stat-week-elev">0m subida</span>
+              </div>
+            </div>
+
+            <div class="stats-summary-card">
+              <span class="card-tag">Este Mês</span>
+              <div class="big-stat">
+                <span id="stat-month-km" class="number">0.0</span>
+                <span class="unit">km</span>
+              </div>
+              <div class="stat-pills">
+                <span id="stat-month-count">0 pedais</span>
+                <span id="stat-month-elev">0m subida</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quadro de Recordes Pessoais (PRs) -->
+          <div class="section-title">Recordes Pessoais (PRs)</div>
+          <div id="prs-container" class="prs-grid">
+            <!-- Renderizado dinamicamente pelo history.js -->
+          </div>
+
+          <!-- Feed de Atividades Salvas -->
+          <div class="section-title">Histórico de Pedais</div>
+          <div id="activities-feed" class="activities-feed">
+            <!-- Renderizado dinamicamente pelo history.js -->
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==========================================
+           ABA 3: 🚴 GARAGEM DA BIKE & DESGASTE
+           ========================================== -->
+      <section id="tab-garage" class="tab-view">
+        <div class="garage-container">
+          
+          <div class="garage-header-row">
+            <div>
+              <h2 style="font-size: 18px; font-weight: 700;">Garagem & Peças</h2>
+              <p style="font-size: 12px; color: #8b90a0;">Controle automático de quilometragem e revisões</p>
+            </div>
+            <button id="btn-add-bike" class="btn-primary">
+              + Nova Bike
+            </button>
+          </div>
+
+          <!-- Lista de Bicicletas e Componentes -->
+          <div id="garage-bikes-list">
+            <!-- Renderizado dinamicamente pelo garage.js -->
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==========================================
+           ABA 4: ⚙️ CONFIGURAÇÕES & ÁUDIO COACH
+           ========================================== -->
+      <section id="tab-settings" class="tab-view">
+        <div class="settings-container">
+          
+          <div class="section-title">Áudio Coach no Fone</div>
+          <div class="settings-card">
+            
+            <div class="setting-row">
+              <div class="setting-label">
+                Avisos por Voz no Fone
+                <small>Anuncia quilômetros, tempo e velocidade média</small>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="cfg-audio-toggle" checked />
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-label">
+                Frequência dos Anúncios
+                <small>A cada quantos quilômetros falar no fone</small>
+              </div>
+              <select id="cfg-audio-interval" class="select-custom">
+                <option value="0.5">A cada 500 metros</option>
+                <option value="1" selected>A cada 1 km</option>
+                <option value="2">A cada 2 km</option>
+                <option value="5">A cada 5 km</option>
+              </select>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-label">
+                Testar Voz no Fone
+                <small>Certifique-se que o fone Bluetooth está conectado</small>
+              </div>
+              <button id="btn-test-voice" class="btn-action-sm" style="color: #00e5ff;">
+                🔊 Testar Agora
+              </button>
+            </div>
+
+          </div>
+
+          <div class="section-title">Preferências do Gravador</div>
+          <div class="settings-card">
+            
+            <div class="setting-row">
+              <div class="setting-label">
+                Auto-Pausa Inteligente
+                <small>Pausa automaticamente em semáforos ou paradas</small>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="cfg-autopause-toggle" checked />
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-label">
+                Peso do Ciclista (kg)
+                <small>Usado no cálculo preciso de calorias gastas</small>
+              </div>
+              <input type="number" id="cfg-cyclist-weight" class="input-custom" value="75" min="40" max="150" style="width: 80px;" />
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-label">
+                Tela Sempre Ativa (Wake Lock)
+                <small>Impede o celular de apagar a tela no guidão</small>
+              </div>
+              <span style="color: #00e676; font-size: 12px; font-weight: 700;">ATIVO</span>
+            </div>
+
+          </div>
+
+          <div class="section-title">Como Instalar no Celular</div>
+          <div class="settings-card" style="font-size: 13px; line-height: 1.6; color: #a4a9b8;">
+            <p><strong>No Android (Chrome):</strong> Toque no menu de três pontinhos no topo e selecione <em>"Instalar aplicativo"</em> ou <em>"Adicionar à tela inicial"</em>.</p>
+            <p style="margin-top: 8px;"><strong>No iPhone (Safari):</strong> Toque no botão de <em>Compartilhar</em> (ícone com quadrado e seta) e selecione <em>"Adicionar à Tela de Início"</em>.</p>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==========================================
+         BARRA DE NAVEGAÇÃO INFERIOR
+         ========================================== -->
+    <nav class="bottom-nav">
+      <button class="nav-item" data-tab="feed">
+        <span class="nav-icon">📊</span>
+        <span>Feed</span>
+      </button>
+
+      <button class="nav-item record-center active" data-tab="record">
+        <div class="nav-icon-circle">🚴</div>
+        <span>Gravar</span>
+      </button>
+
+      <button class="nav-item" data-tab="garage">
+        <span class="nav-icon">🚲</span>
+        <span>Garagem</span>
+      </button>
+
+      <button class="nav-item" data-tab="settings">
+        <span class="nav-icon">⚙️</span>
+        <span>Ajustes</span>
+      </button>
+    </nav>
+
+    <!-- ==========================================
+         MODAL 1: 🗺️ RESUMO PÓS-TREINO (ESTILO STRAVA)
+         ========================================== -->
+    <div id="post-ride-modal" class="modal-overlay">
+      <div class="modal-content">
+        
+        <header class="modal-header">
+          <h2 class="modal-title">🏁 Treino Concluído!</h2>
+          <button class="modal-close-btn" onclick="window.app.closePostRideSummary()">✕</button>
+        </header>
+
+        <div class="modal-body">
+          
+          <!-- Título e Bicicleta -->
+          <div class="form-group">
+            <label>Título do Pedal</label>
+            <input type="text" id="summary-title-input" class="input-custom" value="Giro Matinal 🚴‍♂️" />
+          </div>
+
+          <div class="form-group">
+            <label>Bicicleta Utilizada (descontará o desgaste)</label>
+            <select id="summary-bike-select" class="select-custom">
+              <!-- Preenchido dinamicamente -->
+            </select>
+          </div>
+
+          <!-- Mapa do Percurso com Gradiente de Velocidade -->
+          <div>
+            <label style="font-size: 12px; font-weight: 600; color: #cbd2e0; margin-bottom: 6px; display: block;">
+              Trajeto Percorrido (Cores por Ritmo)
+            </label>
+            <div id="summary-map-container" class="summary-map-box"></div>
+          </div>
+
+          <!-- Métricas Consolidadas -->
+          <div class="summary-metrics-grid">
+            <div class="sum-metric-item">
+              <span class="sum-m-label">Distância</span>
+              <span class="sum-m-value"><span id="sum-dist">0.0</span> <small style="font-size: 11px;">km</small></span>
+            </div>
+
+            <div class="sum-metric-item">
+              <span class="sum-m-label">Tempo Ativo</span>
+              <span class="sum-m-value" id="sum-time">00:00</span>
+            </div>
+
+            <div class="sum-metric-item">
+              <span class="sum-m-label">Vel. Média</span>
+              <span class="sum-m-value"><span id="sum-avg-speed">0.0</span> <small style="font-size: 11px;">km/h</small></span>
+            </div>
+
+            <div class="sum-metric-item">
+              <span class="sum-m-label">Subida</span>
+              <span class="sum-m-value"><span id="sum-elev">0</span> <small style="font-size: 11px;">m</small></span>
+            </div>
+
+            <div class="sum-metric-item">
+              <span class="sum-m-label">Vel. Máx</span>
+              <span class="sum-m-value"><span id="sum-max-speed">0.0</span> <small style="font-size: 11px;">km/h</small></span>
+            </div>
+
+            <div class="sum-metric-item">
+              <span class="sum-m-label">Calorias</span>
+              <span class="sum-m-value"><span id="sum-cal">0</span> <small style="font-size: 11px;">kcal</small></span>
+            </div>
+          </div>
+
+          <!-- Gráfico de Altimetria Interativo -->
+          <div class="chart-wrapper">
+            <div class="chart-title">Perfil de Elevação (Altimetria)</div>
+            <div id="elevation-tooltip" class="elevation-tooltip-box"></div>
+            <canvas id="elevation-canvas" style="width: 100%; height: 140px; display: block;"></canvas>
+            <p style="font-size: 10px; color: #7b8092; text-align: center; margin-top: 4px;">
+              👉 Toque e arraste sobre o gráfico para ver a altitude e o ponto no mapa
+            </p>
+          </div>
+
+          <!-- Upload de Foto do Pedal -->
+          <div class="form-group">
+            <label>Foto do Pedal (opcional)</label>
+            <label class="photo-upload-zone" for="summary-photo-input">
+              <span>📸 Toque para escolher ou tirar uma foto</span>
+              <input type="file" id="summary-photo-input" accept="image/*" style="display: none;" />
+              <img id="summary-photo-preview" class="photo-preview-img" style="display: none;" alt="Foto selecionada" />
+            </label>
+          </div>
+
+          <!-- Notas e Sensações -->
+          <div class="form-group">
+            <label>Notas do Treino</label>
+            <textarea id="summary-notes-input" class="input-custom" rows="2" placeholder="Sensações, clima, percurso, parceiros de giro..."></textarea>
+          </div>
+
+        </div>
+
+        <footer class="modal-footer">
+          <button class="btn-action-sm" onclick="window.app.exportCurrentGPX()">
+            📥 Baixar .GPX
+          </button>
+          <button class="btn-primary" onclick="window.app.saveCompletedRide()">
+            💾 Salvar Pedal
+          </button>
+        </footer>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL 2: 🔍 DETALHES DE PEDAL DO HISTÓRICO
+         ========================================== -->
+    <div id="detail-activity-modal" class="modal-overlay">
+      <div class="modal-content">
+        <header class="modal-header">
+          <div>
+            <h2 id="det-title" class="modal-title">Detalhes do Pedal</h2>
+            <span id="det-date" style="font-size: 11px; color: #8b90a0;"></span>
+          </div>
+          <button class="modal-close-btn" onclick="window.app.closeActivityDetailModal()">✕</button>
+        </header>
+
+        <div class="modal-body">
+          <img id="det-photo" class="photo-preview-img" style="display: none;" alt="Foto do pedal" />
+
+          <div id="detail-map-container" class="summary-map-box"></div>
+
+          <div class="summary-metrics-grid">
+            <div class="sum-metric-item">
+              <span class="sum-m-label">Distância</span>
+              <span class="sum-m-value"><span id="det-dist">0.0</span> <small style="font-size: 11px;">km</small></span>
+            </div>
+            <div class="sum-metric-item">
+              <span class="sum-m-label">Tempo</span>
+              <span class="sum-m-value" id="det-time">00:00</span>
+            </div>
+            <div class="sum-metric-item">
+              <span class="sum-m-label">Vel. Média</span>
+              <span class="sum-m-value"><span id="det-avg-speed">0.0</span> <small style="font-size: 11px;">km/h</small></span>
+            </div>
+            <div class="sum-metric-item">
+              <span class="sum-m-label">Subida</span>
+              <span class="sum-m-value"><span id="det-elev">0</span> <small style="font-size: 11px;">m</small></span>
+            </div>
+            <div class="sum-metric-item">
+              <span class="sum-m-label">Vel. Máx</span>
+              <span class="sum-m-value"><span id="det-max-speed">0.0</span> <small style="font-size: 11px;">km/h</small></span>
+            </div>
+            <div class="sum-metric-item">
+              <span class="sum-m-label">Calorias</span>
+              <span class="sum-m-value"><span id="det-cal">0</span> <small style="font-size: 11px;">kcal</small></span>
+            </div>
+          </div>
+
+          <div class="chart-wrapper">
+            <div class="chart-title">Altimetria & Relevo</div>
+            <canvas id="detail-elevation-canvas" style="width: 100%; height: 140px; display: block;"></canvas>
+          </div>
+        </div>
+
+        <footer class="modal-footer">
+          <button id="btn-det-gpx" class="btn-action-sm">
+            📥 Exportar Arquivo .GPX
+          </button>
+          <button class="btn-action-sm btn-subtle" onclick="window.app.closeActivityDetailModal()">
+            Fechar
+          </button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL 3: 🚲 CADASTRAR NOVA BIKE
+         ========================================== -->
+    <div id="new-bike-modal" class="modal-overlay">
+      <div class="modal-content">
+        <header class="modal-header">
+          <h2 class="modal-title">Nova Bicicleta</h2>
+          <button class="modal-close-btn" onclick="document.getElementById('new-bike-modal').classList.remove('active')">✕</button>
+        </header>
+
+        <form id="form-new-bike">
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Nome / Modelo da Bike</label>
+              <input type="text" id="new-bike-name" class="input-custom" placeholder="Ex: Caloi Strada, Specialized Chisel..." required />
+            </div>
+
+            <div class="form-group">
+              <label>Tipo de Bicicleta</label>
+              <select id="new-bike-type" class="select-custom">
+                <option value="road">Speed / Estrada</option>
+                <option value="mtb">Mountain Bike (MTB)</option>
+                <option value="gravel">Gravel</option>
+                <option value="urban">Urbana / Híbrida</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Quilometragem Inicial já Rodada (km)</label>
+              <input type="number" id="new-bike-km" class="input-custom" value="0" min="0" />
+            </div>
+          </div>
+
+          <footer class="modal-footer">
+            <button type="button" class="btn-action-sm btn-subtle" onclick="document.getElementById('new-bike-modal').classList.remove('active')">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-primary">
+              Cadastrar Bike
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Leaflet Map JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Módulos do MeuPedal -->
+  <script src="js/db.js"></script>
+  <script src="js/audio-coach.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/elevation-chart.js"></script>
+  <script src="js/gpx-exporter.js"></script>
+  <script src="js/garage.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/tracker.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
