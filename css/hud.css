@@ -221,6 +221,7 @@
 
 /* --- PAINEL DE MÉTRICAS INFERIOR --- */
 .hud-metrics-dashboard {
+  position: relative;
   background: rgba(19, 21, 27, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(16px);
@@ -231,6 +232,77 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hud-metrics-dashboard.minimized {
+  display: none !important;
+}
+
+/* Botão Minimizar no Canto Superior Direito do Card */
+.btn-hud-minimize {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #a2a8b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.btn-hud-minimize:hover,
+.btn-hud-minimize:active {
+  background: rgba(0, 230, 118, 0.2);
+  border-color: var(--neon-green);
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+/* Botão Circular Flutuante no Canto Inferior quando Minimizado */
+.btn-hud-restore-circle {
+  position: absolute;
+  bottom: 20px;
+  right: 18px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: rgba(19, 21, 27, 0.94);
+  border: 2.5px solid var(--neon-green);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), 0 0 18px rgba(0, 230, 118, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--neon-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 60;
+  pointer-events: auto;
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: restorePop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-hud-restore-circle:hover {
+  transform: scale(1.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 24px rgba(0, 230, 118, 0.65);
+}
+
+.btn-hud-restore-circle:active {
+  transform: scale(0.93);
+}
+
+@keyframes restorePop {
+  0% { transform: scale(0.3); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 /* Linha Principal (Distância e Tempo) */
@@ -240,6 +312,7 @@
   gap: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding-bottom: 10px;
+  padding-right: 36px; /* Espaço para o botão de minimizar */
 }
 
 .metric-box-primary {

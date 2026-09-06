@@ -358,6 +358,23 @@ class App {
     const btnFinish = document.getElementById('btn-finish-record');
     if (btnFinish) btnFinish.onclick = () => this.finishRecording();
 
+    // Minimizar e Restaurar painel de métricas do HUD
+    const btnMinimize = document.getElementById('btn-minimize-dashboard');
+    const btnRestore = document.getElementById('btn-restore-dashboard');
+    const hudDashboard = document.getElementById('hud-metrics-dashboard');
+
+    if (btnMinimize && btnRestore && hudDashboard) {
+      btnMinimize.addEventListener('click', () => {
+        hudDashboard.classList.add('minimized');
+        btnRestore.style.display = 'flex';
+      });
+
+      btnRestore.addEventListener('click', () => {
+        hudDashboard.classList.remove('minimized');
+        btnRestore.style.display = 'none';
+      });
+    }
+
     // Botões de controle de gravação Pós-Treino
     const photoInput = document.getElementById('summary-photo-input');
     if (photoInput) {

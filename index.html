@@ -86,8 +86,15 @@
             </div>
 
             <!-- Dashboard de Métricas de Guidão -->
-            <div class="hud-metrics-dashboard">
+            <div id="hud-metrics-dashboard" class="hud-metrics-dashboard">
               
+              <!-- Botão para Minimizar o Painel -->
+              <button id="btn-minimize-dashboard" class="btn-hud-minimize" type="button" title="Minimizar painel" aria-label="Minimizar painel">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
+
               <!-- Linha Primária: Distância e Tempo -->
               <div class="hud-primary-row">
                 <div class="metric-box-primary">
@@ -145,6 +152,15 @@
               </div>
 
             </div>
+
+            <!-- Botão Flutuante Circular para Restaurar Painel Minimizado -->
+            <button id="btn-restore-dashboard" class="btn-hud-restore-circle" type="button" style="display: none;" title="Restaurar painel de métricas" aria-label="Restaurar painel de métricas">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="9" y1="21" x2="9" y2="9"></line>
+              </svg>
+            </button>
 
           </div>
         </div>
