@@ -22,6 +22,7 @@ window.toggleBottomMenu = function(e) {
   const btnToggle = document.getElementById('btn-toggle-menu');
   if (bottomNav) {
     const isRevealed = bottomNav.classList.toggle('revealed');
+    document.body.classList.toggle('menu-revealed', isRevealed);
     if (btnToggle) {
       btnToggle.classList.toggle('active', isRevealed);
     }

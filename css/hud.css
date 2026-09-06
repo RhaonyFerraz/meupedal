@@ -309,14 +309,21 @@ button svg * {
   justify-content: flex-start;
   align-items: center;
   gap: 12px;
-  z-index: 60;
+  z-index: 600;
   pointer-events: none;
   margin-bottom: 24px;
   padding-left: 2px;
+  transition: transform 0.28s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
 
 .hud-bottom-actions > * {
   pointer-events: auto !important;
+}
+
+/* Quando o painel está minimizado e o menu inferior de abas é aberto, subir os botões para não ficarem cobertos */
+body:has(.bottom-nav.revealed) .hud-metrics-dashboard.minimized ~ .hud-bottom-actions,
+body.menu-revealed .hud-bottom-actions {
+  transform: translateY(calc(-1 * var(--bottom-bar-height) - 10px));
 }
 
 /* Botão Flutuante de Menu no Canto Inferior Direito */
