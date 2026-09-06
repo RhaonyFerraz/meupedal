@@ -21,6 +21,22 @@ window.restoreHudDashboard = function(e) {
   if (btnRestore) btnRestore.style.display = 'none';
 };
 
+// Função Global para Abrir/Fechar a Barra de Menu Inferior no Gravador
+window.toggleBottomMenu = function(e) {
+  if (e) {
+    if (e.preventDefault) e.preventDefault();
+    if (e.stopPropagation) e.stopPropagation();
+  }
+  const bottomNav = document.querySelector('.bottom-nav');
+  const btnToggle = document.getElementById('btn-toggle-menu');
+  if (bottomNav) {
+    const isRevealed = bottomNav.classList.toggle('revealed');
+    if (btnToggle) {
+      btnToggle.classList.toggle('active', isRevealed);
+    }
+  }
+};
+
 // Controlador Principal do Aplicativo MeuPedal
 class App {
   constructor() {
@@ -31,6 +47,8 @@ class App {
   }
 
   async init() {
+    document.body.className = 'in-tab-record';
+
     // Inicializar banco de dados
     await window.meuPedalDB.init();
 
@@ -53,6 +71,18 @@ class App {
     // PWA Install prompt listener
     this._setupPWAInstall();
 
+    // Fechar menu inferior ao tocar fora dele na tela de gravação
+    document.addEventListener('click', (e) => {
+      const bottomNav = document.querySelector('.bottom-nav');
+      const btnToggle = document.getElementById('btn-toggle-menu');
+      if (this.currentTab === 'record' && bottomNav && bottomNav.classList.contains('revealed')) {
+        if (!bottomNav.contains(e.target) && (!btnToggle || !btnToggle.contains(e.target))) {
+          bottomNav.classList.remove('revealed');
+          if (btnToggle) btnToggle.classList.remove('active');
+        }
+      }
+    });
+
     // Checar URL params (ex: ?tab=feed ou ?action=record)
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('tab')) {
@@ -64,6 +94,17 @@ class App {
 
   navigateTo(tabName) {
     this.currentTab = tabName;
+
+    // Atualizar classe do body para controlar visibilidade do menu
+    document.body.className = `in-tab-${tabName}`;
+
+    // Fechar menu inferior revelado ao voltar para o gravador
+    const bottomNav = document.querySelector('.bottom-nav');
+    const btnToggle = document.getElementById('btn-toggle-menu');
+    if (bottomNav && tabName === 'record') {
+      bottomNav.classList.remove('revealed');
+      if (btnToggle) btnToggle.classList.remove('active');
+    }
 
     // Atualizar botões da barra de navegação inferior
     document.querySelectorAll('.nav-item').forEach(el => {

@@ -124,28 +124,42 @@ body {
   flex-direction: column;
 }
 
-/* Gravador ocupa tela cheia sem scroll interno */
+/* Gravador ocupa tela cheia sem scroll interno e sem barra inferior permanente */
 #tab-record {
   overflow: hidden;
-  padding-bottom: var(--bottom-bar-height);
+  padding-bottom: 0;
 }
 
-/* --- BARRA DE NAVEGAÇÃO INFERIOR --- */
+/* --- BARRA DE NAVEGAÇÃO INFERIOR (Oculta por padrão, revelada via botão de menu) --- */
 .bottom-nav {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: var(--bottom-bar-height);
-  background: var(--glass-bg);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-top: var(--border-color);
+  background: rgba(19, 21, 27, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 -8px 26px rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: space-around;
   align-items: center;
   z-index: 500;
   padding-bottom: env(safe-area-inset-bottom);
+  transform: translateY(120%);
+  transition: transform 0.28s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+.bottom-nav.revealed {
+  transform: translateY(0);
+}
+
+/* Nas abas Feed, Garagem e Ajustes a barra de navegação fica sempre visível */
+body.in-tab-feed .bottom-nav,
+body.in-tab-garage .bottom-nav,
+body.in-tab-settings .bottom-nav {
+  transform: translateY(0);
 }
 
 .nav-item {
