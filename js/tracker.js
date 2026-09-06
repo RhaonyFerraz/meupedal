@@ -29,7 +29,8 @@ class PedalTracker {
     this.autoPauseEnabled = true;
     this.autoPauseSpeedThreshold = 2.5; // km/h
     this.lowSpeedCount = 0;
-    this.lowSpeedMaxTicks = 3; // ~3 segundos abaixo de 2.5 km/h para pausar
+    this.lowSpeedMaxTicks = 6; // ~6 segundos abaixo de 2.5 km/h para pausar
+    this.gracePeriodSec = 15; // Não pausar automaticamente nos primeiros 15 segundos
 
     // Dados do ciclista
     this.cyclistWeightKg = 75;
@@ -206,8 +207,8 @@ class PedalTracker {
       // Filtro de ruído: se velocidade instantânea for irreal (> 90 km/h), descarta o pulo
       if (speedKmH > 90) return;
 
-      // Auto-pausa inteligente
-      if (this.autoPauseEnabled) {
+      // Auto-pausa inteligente (só ativa após período de carência)
+      if (this.autoPauseEnabled && this.movingDurationSec >= this.gracePeriodSec) {
         if (speedKmH < this.autoPauseSpeedThreshold) {
           this.lowSpeedCount++;
           if (this.lowSpeedCount >= this.lowSpeedMaxTicks && this.state === 'RECORDING') {
