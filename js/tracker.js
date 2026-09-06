@@ -34,12 +34,6 @@ class PedalTracker {
     // Dados do ciclista
     this.cyclistWeightKg = 75;
 
-    // Modo Simulador
-    this.isSimulating = false;
-    this.simulatorInterval = null;
-    this.simulatorIndex = 0;
-    this.simSpeedMultiplier = 2; // 2x por padrão para demonstração fluida
-
     // Callbacks de atualização
     this.onUpdate = null; // func({ metrics, currentPoint, state })
     this.onMilestone = null;
@@ -47,11 +41,10 @@ class PedalTracker {
 
   // --- CONTROLE DE GRAVAÇÃO ---
 
-  async start(isSimulation = false) {
+  async start() {
     this.reset();
     this.state = 'RECORDING';
     this.startTime = Date.now();
-    this.isSimulating = isSimulation;
 
     // Iniciar cronômetro
     this.timerInterval = setInterval(() => this._tickTimer(), 1000);
@@ -59,12 +52,8 @@ class PedalTracker {
     // Ativar Wake Lock (tela acesa no guidão)
     await this._requestWakeLock();
 
-    // Iniciar rastreamento real ou simulado
-    if (this.isSimulating) {
-      this._startSimulation();
-    } else {
-      this._startGeolocation();
-    }
+    // Iniciar rastreamento GPS real
+    this._startGeolocation();
 
     if (window.audioCoach) {
       window.audioCoach.reset();
@@ -106,7 +95,6 @@ class PedalTracker {
 
     if (this.timerInterval) clearInterval(this.timerInterval);
     if (this.watchId !== null) navigator.geolocation.clearWatch(this.watchId);
-    if (this.simulatorInterval) clearInterval(this.simulatorInterval);
 
     this._releaseWakeLock();
 
@@ -147,7 +135,6 @@ class PedalTracker {
     this.lastPosition = null;
     this.lastElevation = null;
     this.lowSpeedCount = 0;
-    this.simulatorIndex = 0;
   }
 
   // --- CRONÔMETRO E MÉTRICAS ---
@@ -312,73 +299,6 @@ class PedalTracker {
       },
       options
     );
-  }
-
-  // --- SIMULADOR DE PEDAL (Para testes práticos) ---
-
-  _startSimulation() {
-    // Trajeto simulado: Circuito Parque Ibirapuera / Ciclismo Urbano com altimetria e variações de ritmo
-    const route = this._generateSimulatedRoute();
-    this.simulatorIndex = 0;
-
-    const intervalMs = Math.max(200, Math.round(1000 / this.simSpeedMultiplier));
-
-    this.simulatorInterval = setInterval(() => {
-      if (this.simulatorIndex >= route.length) {
-        this.simulatorIndex = 0; // Loop no percurso
-      }
-
-      const step = route[this.simulatorIndex];
-      this._processNewPosition(
-        step.lat,
-        step.lng,
-        step.alt,
-        step.speedMs,
-        Date.now()
-      );
-
-      this.simulatorIndex++;
-    }, intervalMs);
-  }
-
-  _generateSimulatedRoute() {
-    // Circuito ao redor de uma rota cênica com 120 pontos de coordenadas reais
-    // Centro aproximado: Parque Ibirapuera / Av. Pedro Álvares Cabral
-    const centerLat = -23.5874;
-    const centerLng = -46.6576;
-    const points = [];
-    const totalSteps = 140;
-
-    for (let i = 0; i < totalSteps; i++) {
-      const angle = (i / totalSteps) * (2 * Math.PI);
-      const radius = 0.009 + Math.sin(angle * 3) * 0.003; // Rota sinuosa
-      const lat = centerLat + Math.cos(angle) * radius;
-      const lng = centerLng + Math.sin(angle) * (radius * 1.2);
-
-      // Simulação de relevo: subida na curva norte, descida rápida na curva sul
-      const alt = 760 + Math.sin(angle * 2) * 28 + Math.cos(angle * 4) * 8;
-
-      // Simulação de velocidade:
-      // - No início: arrancada
-      // - Em subida: 15-18 km/h
-      // - No plano: 25-32 km/h
-      // - Em descida: 38-44 km/h
-      // - Entre os passos 70 e 76: Parada em semáforo (0 km/h) para testar a Auto-Pausa!
-      let speedKmH = 26;
-      if (i >= 70 && i <= 75) {
-        speedKmH = 0.5; // Semáforo fechado -> ativa Auto-Pausa!
-      } else if (alt > 780) {
-        speedKmH = 17 + Math.sin(i) * 2; // Subida
-      } else if (alt < 745) {
-        speedKmH = 39 + Math.cos(i) * 3; // Descida veloz
-      } else {
-        speedKmH = 28 + Math.sin(i * 0.5) * 4; // Ritmo de cruzeiro
-      }
-
-      const speedMs = speedKmH / 3.6;
-      points.push({ lat, lng, alt, speedMs });
-    }
-    return points;
   }
 
   // --- UTILITÁRIOS ---

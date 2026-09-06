@@ -145,9 +145,8 @@ class App {
   // --- CONTROLES DE BOTÃO ---
 
   startRecording() {
-    const isSim = document.getElementById('switch-simulate') ? document.getElementById('switch-simulate').checked : false;
     window.pedalMap.clearLive();
-    window.pedalTracker.start(isSim);
+    window.pedalTracker.start();
   }
 
   pauseRecording() {
@@ -359,15 +358,7 @@ class App {
     const btnFinish = document.getElementById('btn-finish-record');
     if (btnFinish) btnFinish.onclick = () => this.finishRecording();
 
-    // Multiplicador do simulador
-    const simSpeedSel = document.getElementById('sim-speed-select');
-    if (simSpeedSel) {
-      simSpeedSel.addEventListener('change', (e) => {
-        window.pedalTracker.simSpeedMultiplier = Number(e.target.value) || 2;
-      });
-    }
-
-    // Upload de Foto no Resumo Pós-Treino
+    // Botões de controle de gravação Pós-Treino
     const photoInput = document.getElementById('summary-photo-input');
     if (photoInput) {
       photoInput.addEventListener('change', (e) => {
