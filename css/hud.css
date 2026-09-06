@@ -198,30 +198,39 @@
   align-items: center;
   justify-content: center;
   margin: 10px 0;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
 }
 
 .speed-number-wrap {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 8px;
+  padding: 4px 14px;
+  background: rgba(10, 11, 15, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 23, 68, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
 .speed-huge {
   font-family: var(--font-hud);
-  font-size: 76px;
-  font-weight: 700;
+  font-size: 78px;
+  font-weight: 800;
   line-height: 0.9;
   letter-spacing: -2px;
-  color: #ffffff;
+  color: #ff1744;
+  text-shadow: 0 2px 16px rgba(255, 23, 68, 0.45), 0 2px 8px rgba(0, 0, 0, 0.9);
 }
 
 .speed-unit {
   font-family: var(--font-hud);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--orange-strava);
+  font-size: 22px;
+  font-weight: 800;
+  color: #ff1744;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 12px rgba(255, 23, 68, 0.45), 0 2px 6px rgba(0, 0, 0, 0.9);
 }
 
 .speed-label {
