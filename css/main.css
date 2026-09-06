@@ -11,12 +11,12 @@
   --bg-card-hover: #1a1d26;
   --bg-input: #1a1d26;
   --border-color: rgba(255, 255, 255, 0.08);
-  --border-focus: #fc4c02;
+  --border-focus: #00e676;
 
-  /* Cores de Acento Esportivo */
-  --orange-strava: #fc4c02;
-  --orange-light: #ff6826;
-  --orange-glow: rgba(252, 76, 2, 0.35);
+  /* Cores de Acento Esportivo (Verde Vivo) */
+  --orange-strava: #00e676;
+  --orange-light: #69f0ae;
+  --orange-glow: rgba(0, 230, 118, 0.38);
   --neon-green: #00e676;
   --neon-cyan: #00e5ff;
   --amber-yellow: #ffb300;
@@ -72,8 +72,8 @@ body {
 /* --- BANNER DE INSTALAÇÃO PWA --- */
 .pwa-banner {
   display: none;
-  background: linear-gradient(90deg, #fc4c02, #ff7a38);
-  color: #ffffff;
+  background: linear-gradient(90deg, #00c853, #00e676);
+  color: #05210d;
   padding: 10px 16px;
   justify-content: space-between;
   align-items: center;
@@ -84,7 +84,7 @@ body {
 
 .pwa-banner button {
   background: #ffffff;
-  color: #fc4c02;
+  color: #00c853;
   border: none;
   border-radius: 20px;
   padding: 6px 14px;

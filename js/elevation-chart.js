@@ -95,11 +95,11 @@ class ElevationChart {
     const paddingTop = 15;
     const chartH = h - paddingBottom - paddingTop;
 
-    // Gradiente esportivo laranja translúcido
+    // Gradiente esportivo verde vivo translúcido
     const gradient = ctx.createLinearGradient(0, paddingTop, 0, h - paddingBottom);
-    gradient.addColorStop(0, 'rgba(252, 76, 2, 0.45)');
-    gradient.addColorStop(0.7, 'rgba(252, 76, 2, 0.15)');
-    gradient.addColorStop(1, 'rgba(252, 76, 2, 0.0)');
+    gradient.addColorStop(0, 'rgba(0, 230, 118, 0.45)');
+    gradient.addColorStop(0.7, 'rgba(0, 230, 118, 0.15)');
+    gradient.addColorStop(1, 'rgba(0, 230, 118, 0.0)');
 
     // Iniciar traçado de relevo
     ctx.beginPath();
@@ -127,7 +127,7 @@ class ElevationChart {
       const y = h - paddingBottom - ((alts[i] - minAlt) / altRange) * chartH;
       ctx.lineTo(x, y);
     }
-    ctx.strokeStyle = '#fc4c02';
+    ctx.strokeStyle = '#00e676';
     ctx.lineWidth = 2.5;
     ctx.stroke();
 
@@ -179,7 +179,7 @@ class ElevationChart {
         tooltip.innerHTML = `
           <strong>${Math.round(pt.alt)}m</strong> alt | 
           <span>${pt.distance ? pt.distance.toFixed(1) : 0} km</span> | 
-          <span style="color: #fc4c02;">${pt.speed ? pt.speed.toFixed(1) : 0} km/h</span>
+          <span style="color: #00e676;">${pt.speed ? pt.speed.toFixed(1) : 0} km/h</span>
         `;
       }
     }

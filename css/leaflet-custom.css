@@ -25,8 +25,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(252, 76, 2, 0.35);
-  border: 2px solid #fc4c02;
+  background: rgba(0, 230, 118, 0.35);
+  border: 2px solid #00e676;
   animation: radarWave 1.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
@@ -41,13 +41,13 @@
   z-index: 5;
   width: 26px;
   height: 26px;
-  background: #fc4c02;
+  background: #00e676;
   border: 3px solid #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 12px rgba(252, 76, 2, 0.8);
+  box-shadow: 0 0 14px rgba(0, 230, 118, 0.85);
   transition: transform 0.3s ease;
 }
 

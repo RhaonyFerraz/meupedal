@@ -6,9 +6,9 @@
       <stop offset="100%" stop-color="#050608"/>
     </linearGradient>
     <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ff7338"/>
-      <stop offset="50%" stop-color="#fc4c02"/>
-      <stop offset="100%" stop-color="#d33600"/>
+      <stop offset="0%" stop-color="#69f0ae"/>
+      <stop offset="50%" stop-color="#00e676"/>
+      <stop offset="100%" stop-color="#00c853"/>
     </linearGradient>
     <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#00f2fe"/>
@@ -33,19 +33,19 @@
     <!-- Back Wheel -->
     <circle cx="160" cy="320" r="64" fill="none" stroke="#4a4d5a" stroke-width="10"/>
     <circle cx="160" cy="320" r="54" fill="none" stroke="url(#orangeGrad)" stroke-width="6" opacity="0.8"/>
-    <circle cx="160" cy="320" r="10" fill="#fc4c02"/>
+    <circle cx="160" cy="320" r="10" fill="#00e676"/>
 
     <!-- Front Wheel -->
     <circle cx="340" cy="320" r="64" fill="none" stroke="#4a4d5a" stroke-width="10"/>
     <circle cx="340" cy="320" r="54" fill="none" stroke="url(#orangeGrad)" stroke-width="6" opacity="0.8"/>
-    <circle cx="340" cy="320" r="10" fill="#fc4c02"/>
+    <circle cx="340" cy="320" r="10" fill="#00e676"/>
 
     <!-- Bike Frame Structure -->
     <!-- Bottom Bracket (Central Pivot) -->
     <circle cx="235" cy="320" r="12" fill="#fff"/>
 
     <!-- Chainstay: Back wheel to BB -->
-    <line x1="160" y1="320" x2="235" y2="320" stroke="#ff834f" stroke-width="10" stroke-linecap="round"/>
+    <line x1="160" y1="320" x2="235" y2="320" stroke="#69f0ae" stroke-width="10" stroke-linecap="round"/>
     
     <!-- Seatstay: Back wheel to saddle junction -->
     <line x1="160" y1="320" x2="215" y2="230" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
@@ -70,11 +70,11 @@
 
     <!-- Dynamic Cyclist Silhouette -->
     <!-- Head/Helmet -->
-    <circle cx="280" cy="140" r="22" fill="#fc4c02" filter="url(#glow)"/>
-    <ellipse cx="285" cy="136" rx="26" ry="12" fill="#ff7a45" transform="rotate(-18 285 136)"/>
+    <circle cx="280" cy="140" r="22" fill="#00e676" filter="url(#glow)"/>
+    <ellipse cx="285" cy="136" rx="26" ry="12" fill="#69f0ae" transform="rotate(-18 285 136)"/>
 
     <!-- Cyclist Torso / Back -->
-    <path d="M 270 155 Q 235 185 218 220" fill="none" stroke="#fc4c02" stroke-width="18" stroke-linecap="round"/>
+    <path d="M 270 155 Q 235 185 218 220" fill="none" stroke="#00e676" stroke-width="18" stroke-linecap="round"/>
 
     <!-- Arm reaching handlebars -->
     <path d="M 255 175 L 305 185 L 335 188" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
@@ -91,5 +91,5 @@
   </g>
 
   <!-- Brand Name Accent -->
-  <text x="256" y="445" text-anchor="middle" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="34" letter-spacing="4">MEU<tspan fill="#fc4c02">PEDAL</tspan></text>
+  <text x="256" y="445" text-anchor="middle" fill="#ffffff" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="34" letter-spacing="4">MEU<tspan fill="#00e676">PEDAL</tspan></text>
 </svg>

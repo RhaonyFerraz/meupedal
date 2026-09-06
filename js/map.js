@@ -33,9 +33,9 @@ class PedalMap {
       attribution: '© OpenStreetMap'
     }).addTo(this.liveMap);
 
-    // Polyline do trajeto ao vivo com brilho laranja Strava
+    // Polyline do trajeto ao vivo com brilho verde neon
     this.livePolyline = L.polyline([], {
-      color: '#fc4c02',
+      color: '#00e676',
       weight: 6,
       opacity: 0.95,
       lineJoin: 'round',

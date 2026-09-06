@@ -306,7 +306,7 @@ class ActivityHistory {
 
     return `
       <svg viewBox="0 0 ${width} ${height}" class="mini-route-svg">
-        <path d="${pathData}" fill="none" stroke="#fc4c02" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="${pathData}" fill="none" stroke="#00e676" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     `;
   }
