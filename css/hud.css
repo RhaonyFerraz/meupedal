@@ -128,17 +128,22 @@
 .hud-map-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+button svg,
+button svg * {
+  pointer-events: none !important;
 }
 
 .hud-map-btn {
-  background: rgba(19, 21, 27, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(19, 21, 27, 0.9);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   color: #00e676;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -147,11 +152,14 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
   transition: all 0.22s ease;
   padding: 0;
+  touch-action: manipulation;
+  pointer-events: auto !important;
+  z-index: 50;
 }
 
 .hud-map-btn:hover,
 .hud-map-btn:active {
-  background: rgba(0, 230, 118, 0.2);
+  background: rgba(0, 230, 118, 0.25);
   border-color: #00e676;
   box-shadow: 0 0 16px rgba(0, 230, 118, 0.45);
   transform: scale(1.08);
@@ -268,28 +276,30 @@
 /* Botão Minimizar no Canto Superior Direito do Card */
 .btn-hud-minimize {
   position: absolute;
-  top: 10px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
+  top: 8px;
+  right: 10px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #a2a8b8;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 10;
+  z-index: 30;
   transition: all 0.2s ease;
   padding: 0;
+  touch-action: manipulation;
+  pointer-events: auto !important;
 }
 
 .btn-hud-minimize:hover,
 .btn-hud-minimize:active {
-  background: rgba(0, 230, 118, 0.2);
-  border-color: var(--neon-green);
-  color: #ffffff;
+  background: rgba(0, 230, 118, 0.25);
+  border-color: #00e676;
+  color: #00e676;
   transform: scale(1.08);
 }
 
@@ -298,8 +308,8 @@
   position: absolute;
   bottom: 20px;
   right: 18px;
-  width: 58px;
-  height: 58px;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
   background: rgba(19, 21, 27, 0.94);
   border: 2.5px solid var(--neon-green);
@@ -312,7 +322,8 @@
   justify-content: center;
   cursor: pointer;
   z-index: 60;
-  pointer-events: auto;
+  pointer-events: auto !important;
+  touch-action: manipulation;
   transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
   animation: restorePop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }

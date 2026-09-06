@@ -1,9 +1,6 @@
-// Funções Globais para Minimizar e Restaurar Painel de Métricas (instantâneo)
+// Funções Globais para o HUD (resposta instantânea no toque e clique)
 window.minimizeHudDashboard = function(e) {
-  if (e) {
-    if (e.preventDefault) e.preventDefault();
-    if (e.stopPropagation) e.stopPropagation();
-  }
+  if (e && e.stopPropagation) e.stopPropagation();
   const hudDashboard = document.getElementById('hud-metrics-dashboard');
   const btnRestore = document.getElementById('btn-restore-dashboard');
   if (hudDashboard) hudDashboard.classList.add('minimized');
@@ -11,10 +8,7 @@ window.minimizeHudDashboard = function(e) {
 };
 
 window.restoreHudDashboard = function(e) {
-  if (e) {
-    if (e.preventDefault) e.preventDefault();
-    if (e.stopPropagation) e.stopPropagation();
-  }
+  if (e && e.stopPropagation) e.stopPropagation();
   const hudDashboard = document.getElementById('hud-metrics-dashboard');
   const btnRestore = document.getElementById('btn-restore-dashboard');
   if (hudDashboard) hudDashboard.classList.remove('minimized');
@@ -23,10 +17,7 @@ window.restoreHudDashboard = function(e) {
 
 // Função Global para Abrir/Fechar a Barra de Menu Inferior no Gravador
 window.toggleBottomMenu = function(e) {
-  if (e) {
-    if (e.preventDefault) e.preventDefault();
-    if (e.stopPropagation) e.stopPropagation();
-  }
+  if (e && e.stopPropagation) e.stopPropagation();
   const bottomNav = document.querySelector('.bottom-nav');
   const btnToggle = document.getElementById('btn-toggle-menu');
   if (bottomNav) {
@@ -71,12 +62,13 @@ class App {
     // PWA Install prompt listener
     this._setupPWAInstall();
 
-    // Fechar menu inferior ao tocar fora dele na tela de gravação
-    document.addEventListener('click', (e) => {
+    // Fechar menu inferior ao tocar fora dele na tela de gravação (ignora o próprio botão do menu)
+    document.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('#btn-toggle-menu')) return;
       const bottomNav = document.querySelector('.bottom-nav');
       const btnToggle = document.getElementById('btn-toggle-menu');
       if (this.currentTab === 'record' && bottomNav && bottomNav.classList.contains('revealed')) {
-        if (!bottomNav.contains(e.target) && (!btnToggle || !btnToggle.contains(e.target))) {
+        if (!bottomNav.contains(e.target)) {
           bottomNav.classList.remove('revealed');
           if (btnToggle) btnToggle.classList.remove('active');
         }
@@ -427,13 +419,19 @@ class App {
     const btnRestore = document.getElementById('btn-restore-dashboard');
 
     if (btnMinimize) {
-      btnMinimize.onclick = (e) => window.minimizeHudDashboard(e);
-      btnMinimize.addEventListener('touchend', (e) => window.minimizeHudDashboard(e), { passive: false });
+      btnMinimize.addEventListener('pointerdown', (e) => window.minimizeHudDashboard(e));
+      btnMinimize.addEventListener('click', (e) => window.minimizeHudDashboard(e));
     }
 
     if (btnRestore) {
-      btnRestore.onclick = (e) => window.restoreHudDashboard(e);
-      btnRestore.addEventListener('touchend', (e) => window.restoreHudDashboard(e), { passive: false });
+      btnRestore.addEventListener('pointerdown', (e) => window.restoreHudDashboard(e));
+      btnRestore.addEventListener('click', (e) => window.restoreHudDashboard(e));
+    }
+
+    const btnToggleMenu = document.getElementById('btn-toggle-menu');
+    if (btnToggleMenu) {
+      btnToggleMenu.addEventListener('pointerdown', (e) => window.toggleBottomMenu(e));
+      btnToggleMenu.addEventListener('click', (e) => window.toggleBottomMenu(e));
     }
 
     // Botões de controle de gravação Pós-Treino
