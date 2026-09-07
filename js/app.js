@@ -36,7 +36,7 @@ class App {
     this.currentCompletedRide = null;
     this.photoDataUrl = null;
     this.deferredPrompt = null;
-    this._recordTabEnteredAt = 0; // timestamp da última vez que entrou na aba de gravação
+    this._recordTabEnteredAt = null; // timestamp quando NAVEGOU para a aba de gravação (null = já estava lá)
   }
 
   async init() {
@@ -112,7 +112,7 @@ class App {
 
     // Se navegou para o gravador, garantir que o mapa recalcule dimensões
     if (tabName === 'record' && window.pedalMap.liveMap) {
-      this._recordTabEnteredAt = Date.now(); // marca o momento da entrada
+      this._recordTabEnteredAt = Date.now(); // marca que ACABOU de navegar para cá
       setTimeout(() => window.pedalMap.liveMap.invalidateSize(), 150);
     }
 
@@ -405,12 +405,16 @@ class App {
     }
 
     // Botões de controle de gravação
-    // Cooldown de 800ms após navegar para a aba: evita disparo acidental com o dedo ainda na tela
+    // Cooldown de 800ms SOMENTE se o usuário veio de outra aba (evita disparo acidental com dedo na tela)
     const btnStart = document.getElementById('btn-start-record');
     if (btnStart) {
       btnStart.onclick = () => {
-        const elapsed = Date.now() - this._recordTabEnteredAt;
-        if (elapsed < 800) return; // ignora se acabou de entrar na aba
+        // Se _recordTabEnteredAt for null, o usuário já estava na aba → inicia normalmente
+        if (this._recordTabEnteredAt !== null) {
+          const elapsed = Date.now() - this._recordTabEnteredAt;
+          if (elapsed < 800) return; // muito próximo da navegação, ignora
+          this._recordTabEnteredAt = null; // depois do cooldown, reseta
+        }
         this.startRecording();
       };
     }
