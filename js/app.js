@@ -403,8 +403,26 @@ class App {
     }
 
     // Botões de controle de gravação
+    // Delay de 600ms para evitar disparo acidental ao navegar para a aba com o dedo ainda na tela
     const btnStart = document.getElementById('btn-start-record');
-    if (btnStart) btnStart.onclick = () => this.startRecording();
+    if (btnStart) {
+      btnStart.addEventListener('pointerdown', () => {
+        this._startRecordPending = true;
+      });
+      btnStart.addEventListener('pointerleave', () => {
+        this._startRecordPending = false;
+      });
+      btnStart.addEventListener('pointercancel', () => {
+        this._startRecordPending = false;
+      });
+      btnStart.onclick = () => {
+        const pending = this._startRecordPending;
+        this._startRecordPending = false;
+        // Só inicia se o toque veio diretamente neste botão (não herdado de outra tela)
+        if (!pending) return;
+        setTimeout(() => this.startRecording(), 0);
+      };
+    }
 
     const btnPause = document.getElementById('btn-pause-record');
     if (btnPause) btnPause.onclick = () => this.pauseRecording();
