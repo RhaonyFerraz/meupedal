@@ -1,5 +1,5 @@
 // Service Worker para MeuPedal PWA
-const CACHE_NAME = 'meupedal-v18';
+const CACHE_NAME = 'meupedal-v19';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
