@@ -227,7 +227,7 @@ button svg * {
 
 .speed-huge {
   font-family: var(--font-hud);
-  font-size: 52px;
+  font-size: 64px;
   font-weight: 800;
   line-height: 0.9;
   letter-spacing: -1px;
@@ -237,7 +237,7 @@ button svg * {
 
 .speed-unit {
   font-family: var(--font-hud);
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 800;
   color: #ff1744;
   text-transform: uppercase;
