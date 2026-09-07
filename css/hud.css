@@ -476,11 +476,11 @@ body.menu-revealed .hud-bottom-actions {
 
 .btn-record-main {
   flex: 1;
-  height: 56px;
-  border-radius: 16px;
+  height: 28px;
+  border-radius: 8px;
   border: none;
   font-family: var(--font-main);
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -488,9 +488,9 @@ body.menu-revealed .hud-bottom-actions {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 5px;
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
 }
 
 .btn-start {
