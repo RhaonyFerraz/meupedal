@@ -494,8 +494,10 @@ body.menu-revealed .hud-bottom-actions {
 }
 
 .btn-start {
+  max-width: 180px;
+  padding: 0 16px;
   background: linear-gradient(135deg, var(--orange-light), var(--orange-strava));
-  color: #ffffff;
+  color: #d50000;
   box-shadow: 0 6px 22px var(--orange-glow);
 }
 
